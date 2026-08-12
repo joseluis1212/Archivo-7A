@@ -352,6 +352,12 @@
   }
   #toast.show{transform:translate(-50%,0)}
 
+  /* ============ ADICIONES ============ */
+  .badge-anom.verified{border-color:var(--amber);color:var(--amber)}
+  .badge-anom.verified i{background:var(--amber);animation:none}
+  #fileInput{display:none}
+  .card-media:focus-visible,.w-btn:focus-visible,.btn-soul:focus-visible,.filters button:focus-visible,.dropzone:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
   @media(max-width:900px){
     .hero{grid-template-columns:1fr}
     .hero-right{order:-1}
@@ -368,5 +374,380 @@
 <div class="scanlines"></div>
 <div class="noise"></div>
 
-<!-- CINTA DE ADVERTENCIA -->
-<div class=
+<!-- ============ TICKER ============ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>⚠ NO MIRES DIRECTAMENTE AL ECLIPSE ⚠ EL MINISTERIO NIEGA EL SEGUNDO CONTACTO ⚠ 37 TESTIGOS DESAPARECIDOS EN LAS ÚLTIMAS 24 HORAS ⚠ LA CORONA NO TIENE ESAS FORMAS ⚠ SI TU SOMBRA NO COINCIDE CON TU CUERPO, REPÓRTALO DE INMEDIATO ⚠ LOS FILTROS OFICIALES NO PROTEGEN: OCULTAN ⚠</span>
+    <span>⚠ NO MIRES DIRECTAMENTE AL ECLIPSE ⚠ EL MINISTERIO NIEGA EL SEGUNDO CONTACTO ⚠ 37 TESTIGOS DESAPARECIDOS EN LAS ÚLTIMAS 24 HORAS ⚠ LA CORONA NO TIENE ESAS FORMAS ⚠ SI TU SOMBRA NO COINCIDE CON TU CUERPO, REPÓRTALO DE INMEDIATO ⚠ LOS FILTROS OFICIALES NO PROTEGEN: OCULTAN ⚠</span>
+  </div>
+</div>
+
+<!-- ============ TOPBAR ============ -->
+<header class="topbar">
+  <div class="brand">EL SOL NOS MIENTE <small>REGISTRO DE ANOMALÍAS · EXP-2026-∞</small></div>
+  <div class="live"><span class="dot"></span>SEÑAL ACTIVA · <b id="clock">--:--:--</b> · NODO 7</div>
+</header>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div>
+      <p class="stamp">✷ MATERIAL CONFISCADO · COPIA Nº 3 DE 3 ✷</p>
+      <h1 class="glitch" data-text="EL SOL NOS MIENTE">EL SOL NOS MIENTE</h1>
+      <p class="lead">El 12 de agosto de 2026, durante 1 min 42 s de totalidad, <strong>cámaras de toda la península registraron lo mismo</strong>. Las agencias lo llaman «refracción atmosférica inusual». Nosotros lo llamamos prueba. Este es el archivo público de lo que el cielo intentó decirnos.</p>
+      <div class="warning-box">
+        <div class="warning-title">⚠ AVISO DE SEGURIDAD</div>
+        <p>Si observaste el eclipse sin protección y desde entonces <em>tu sombra llega antes que tú</em>, no leas esta página a oscuras. Y sobre todo: <em>no vuelvas a mirar al sol</em>.</p>
+      </div>
+      <a class="btn-soul" href="#transmitir">▲ TRANSMITIR MI PRUEBA</a>
+    </div>
+    <div class="hero-right">
+      <div class="eclipse" aria-hidden="true">
+        <div class="corona"></div>
+        <div class="sun-disc"></div>
+        <div class="ring"></div>
+        <div class="ring r2"></div>
+        <div class="orb"></div>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><b id="stReg">00</b><span>Registros</span></div>
+        <div class="hstat"><b id="stWit">000</b><span>Testigos</span></div>
+        <div class="hstat"><b id="stDays">00</b><span>Días post-evento</span></div>
+        <div class="hstat zero"><b>00</b><span>Refutaciones</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECCIÓN 01: SUBIDA ============ -->
+  <section id="transmitir">
+    <div class="section-head">
+      <span class="num">SECCIÓN 01</span>
+      <h2>Transmite tu prueba</h2>
+      <p class="sub">Canal cifrado · Tu identidad se destruye al recibir el archivo · No subas la misma foto dos veces: ellas también lo saben.</p>
+    </div>
+    <div class="upload-grid">
+      <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Subir fotografía del eclipse">
+        <img id="preview" alt="" hidden>
+        <div class="dz-inner">
+          <span class="dz-icon">📷</span>
+          <p><b>ARRASTRA TU FOTOGRAFÍA</b><br>o pulsa para seleccionar</p>
+          <p class="hint">JPG · PNG · TIFF — MÁX. 10 MB — RECOMENDADO: REVELADO QUÍMICO ESCANEADO</p>
+        </div>
+        <div class="dz-overlay" id="dzInfo">—</div>
+      </div>
+      <input type="file" id="fileInput" accept="image/*">
+      <form class="upload-form" id="upForm" novalidate>
+        <label for="alias">ALIAS / CÓDIGO DE TESTIGO <b>*</b></label>
+        <input type="text" id="alias" maxlength="28" placeholder="p. ej. «Observador-Δ7»" autocomplete="off">
+        <label for="lugar">ÚLTIMA UBICACIÓN CONOCIDA</label>
+        <input type="text" id="lugar" maxlength="40" placeholder="p. ej. «Sierra de Gredos, km 41»" autocomplete="off">
+        <div>
+          <div class="progress"><i id="bar"></i></div>
+          <p id="progressLabel" aria-live="polite"></p>
+        </div>
+        <div class="status" id="status" aria-live="polite">CANAL ABIERTO — ESPERANDO MATERIAL…</div>
+        <button type="button" id="go" disabled>⬆ TRANSMITIR AL ARCHIVO</button>
+        <p class="form-note">Al transmitir aceptas que el original sea eliminado de este plano de la red. No podemos proteger tu copia física.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ SECCIÓN 02: GALERÍA ============ -->
+  <section id="archivo">
+    <div class="section-head">
+      <span class="num">SECCIÓN 02</span>
+      <h2>Archivo de anomalías</h2>
+      <p class="sub">Cada registro necesita testigos. Pulsa «+1 TESTIGO» si tú también lo viste. Al llegar a 50, el registro queda verificado para siempre.</p>
+    </div>
+    <div class="filters" id="filters">
+      <button data-f="all" class="active">Todas</button>
+      <button data-f="grave">Anomalía grave</button>
+      <button data-f="oficial">Archivo oficial</button>
+      <button data-f="nueva" class="danger">Sin verificar</button>
+      <span id="syncLabel">ENLACE ESTABLE · NODO 7</span>
+      <span id="galleryCount"></span>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div>
+    <div class="f-brand">EL SOL NOS MIENTE</div>
+    <p>RED DE OBSERVACIÓN CIVIL INDEPENDIENTE.<br>NINGÚN GOBIERNO FINANCIA ESTO. NINGUNO LO PERMITIRÁ.</p>
+  </div>
+  <div>
+    <p class="blinkline">● GRABANDO DESDE EL 12.08.2026</p>
+    <p class="coords">40.4168° N / 3.7038° O — ÚLTIMA RECEPCIÓN 03:14:07</p>
+  </div>
+  <div>
+    <p>SI ESTE SITIO DESAPARECE, BUSCA LA COPIA Nº 4.</p>
+    <p>NO MIRES ARRIBA. YA ES TARDE.</p>
+  </div>
+</footer>
+
+<!-- ============ LIGHTBOX ============ -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Registro ampliado">
+  <button class="lb-close" id="lbClose">✕ CERRAR</button>
+  <div class="lb-box">
+    <img id="lbImg" alt="Registro ampliado">
+    <div class="lb-info">
+      <p class="cap" id="lbCap"></p>
+      <p class="meta" id="lbMeta"></p>
+    </div>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- CAMPO DE ESTRELLAS ---------- */
+  var cv=document.getElementById('starfield'),cx=cv.getContext('2d');
+  var W,H,stars=[],meteor=null,nextMeteor=performance.now()+4000;
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+  window.addEventListener('resize',resize);resize();
+  for(var i=0;i<170;i++){
+    stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.4+.3,p:Math.random()*Math.PI*2,s:.4+Math.random()*1.6,red:Math.random()<.12});
+  }
+  function frame(t){
+    cx.clearRect(0,0,W,H);
+    var g=cx.createRadialGradient(W*.75,H*.12,0,W*.75,H*.12,W*.5);
+    g.addColorStop(0,'rgba(110,0,0,0.10)');g.addColorStop(1,'rgba(0,0,0,0)');
+    cx.fillStyle=g;cx.fillRect(0,0,W,H);
+    for(var k=0;k<stars.length;k++){
+      var s=stars[k];
+      var tw=.55+.45*Math.sin(t*.001*s.s+s.p);
+      cx.globalAlpha=tw*(s.red?.8:1);
+      cx.fillStyle=s.red?'#ff5a3c':'#e8e0da';
+      cx.fillRect(s.x*W,s.y*H,s.r,s.r);
+    }
+    cx.globalAlpha=1;
+    if(!meteor&&t>nextMeteor){meteor={x:Math.random()*W*.8+W*.1,y:-20,vx:(Math.random()*2-1)*3,vy:4+Math.random()*3,life:1};}
+    if(meteor){
+      meteor.x+=meteor.vx;meteor.y+=meteor.vy;meteor.life-=.012;
+      cx.strokeStyle='rgba(255,60,40,'+Math.max(meteor.life,0)+')';
+      cx.lineWidth=1.4;
+      cx.beginPath();cx.moveTo(meteor.x,meteor.y);cx.lineTo(meteor.x-meteor.vx*8,meteor.y-meteor.vy*8);cx.stroke();
+      if(meteor.life<=0||meteor.y>H+40){meteor=null;nextMeteor=t+5000+Math.random()*9000;}
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- RELOJ + DÍAS ---------- */
+  var clockEl=document.getElementById('clock');
+  function tick(){clockEl.textContent=new Date().toTimeString().slice(0,8);}
+  tick();setInterval(tick,1000);
+  var eventDate=new Date('2026-08-12T11:47:00');
+  var days=Math.max(1,Math.ceil((Date.now()-eventDate.getTime())/86400000));
+  document.getElementById('stDays').textContent=String(days).padStart(2,'0');
+
+  /* ---------- DATOS SEMILLA ---------- */
+  var DATA=[
+    {id:1,cat:'grave',tag:'SIN FILTRO',exp:'1/4000 · f/8 · 400MM',w:23,
+     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/12f3a1965-320b-4b31-b32a-3f2e4d2d4667.png',
+     cap:'La corona presenta una estructura angular que ningún modelo explica. El filtro certificado apareció derretido por dentro. Por dentro.',
+     meta:'CÁCERES · 12.08.2026',alias:'OBSERVADOR-Δ7'},
+    {id:2,cat:'grave',tag:'VHS-C MUNICIPAL',exp:'SP · 00:47:12 REC',w:41,
+     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/19683757a-8fa3-4c4a-8411-c76a5edbb743.png',
+     cap:'Plaza Mayor, 11:47. Todos miraban arriba. En la cinta original nadie parpadeaba. En esta copia, tres personas ya no están.',
+     meta:'TRUJILLO · 12.08.2026',alias:'CÁMARA MUNICIPAL 04'},
+    {id:3,cat:'grave',tag:'PLACA 1905',exp:'COL. OBSERVATORIO',w:9,
+     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/109481dc7-96b5-4250-9814-f625b2be32b0.png',
+     cap:'Placa catalogada en 1905. Los filamentos y el objeto del limbo ya estaban ahí. Nadie los registró hasta ayer. Ayer no fue la primera vez.',
+     meta:'OBSERVATORIO DEL EBRO · 1905',alias:'ARCHIVISTA E.B.'},
+    {id:4,cat:'oficial',tag:'COMUNICADO Nº7',exp:'PERITAJE OFICIAL',w:18,
+     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/12c320983-2e0a-454d-90f4-b4054659f1a3.png',
+     cap:'«Las sombras alargadas se deben a refracción inusual», dice el comunicado. El eclipse ocurrió al mediodía. Las sombras apuntan al este. El este era el norte.',
+     meta:'VALLE DEL TIÉTAR · 12.08.2026',alias:'PASTOR ANÓNIMO'},
+    {id:5,cat:'grave',tag:'ROLLO SELLADO 1972',exp:'REVELADO 2026',w:66,
+     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/1591571b7-deb5-4d85-a8ad-d55a5ed4abdf.png',
+     cap:'Encontrada dentro de una cámara sellada desde 1972. El rollo estaba virgen. Esta imagen no. La figura no estaba en el negativo: estaba esperando.',
+     meta:'HALLAZGO: ALBACETE · ROLLO 1972',alias:'RESTAURADORA M.Q.'},
+    {id:6,cat:'oficial',tag:'PERICIA POLICIAL',exp:'EXP. 4412/26',w:12,
+     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/187752f45-7b18-4f26-ab94-3c2d8d72e4bc.png',
+     cap:'Tomada desde un vehículo en marcha, sin conductor. El parabrisas se fracturó desde dentro. El vehículo no tiene dueño registrado desde el día 11.',
+     meta:'A-6 KM 39 · 12.08.2026',alias:'GRÚA POLICIAL 12'}
+  ];
+
+  var filter='all';
+  var gallery=document.getElementById('gallery');
+  var syncLabel=document.getElementById('syncLabel');
+  var syncT=null;
+
+  function cardHTML(d){
+    var verified=d.w>=50;
+    return '<article class="card" data-cat="'+d.cat+'" data-id="'+d.id+'">'
+      +'<div class="card-media" role="button" tabindex="0" aria-label="Ampliar registro">'
+      +'<img src="'+d.img+'" alt="Registro '+d.id+'" loading="lazy">'
+      +'<span class="badge-tag'+(d.tag==='SIN FILTRO'?' nofiltro':'')+'">'+d.tag+'</span>'
+      +'<span class="badge-anom'+(verified?' verified':'')+'"><i></i>'+(verified?'VERIFICADA':'ANOMALÍA')+'</span>'
+      +'<span class="exp">'+d.exp+'</span>'
+      +'</div>'
+      +'<p class="card-caption">'+d.cap+'</p>'
+      +'<div class="card-witness">'
+      +'<b class="w-num" data-num="'+d.id+'">'+d.w+'</b>'
+      +'<p class="w-label">testigos presenciales</p>'
+      +'<button class="w-btn" data-w="'+d.id+'"'+(verified?' disabled':'')+'>'+(verified?'✓ VERIFICADA':'+1 TESTIGO')+'</button>'
+      +'</div>'
+      +'<p class="card-meta">'+d.meta+' · '+d.alias+'</p>'
+      +'</article>';
+  }
+
+  function updateStats(){
+    document.getElementById('stReg').textContent=String(DATA.length).padStart(2,'0');
+    var tot=DATA.reduce(function(a,b){return a+b.w;},0);
+    document.getElementById('stWit').textContent=tot>999?(tot/1000).toFixed(1)+'K':String(tot).padStart(3,'0');
+  }
+
+  function render(){
+    var list=DATA.filter(function(d){return filter==='all'||d.cat===filter;});
+    gallery.innerHTML=list.map(cardHTML).join('');
+    document.getElementById('galleryCount').textContent='MOSTRANDO '+list.length+' DE '+DATA.length+' REGISTROS · ORDEN DE RECEPCIÓN INVERSO';
+    updateStats();
+  }
+
+  /* ---------- FILTROS ---------- */
+  document.getElementById('filters').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-f]');if(!b)return;
+    document.querySelectorAll('#filters button').forEach(function(x){x.classList.toggle('active',x===b);});
+    filter=b.dataset.f;
+    syncLabel.textContent='RESINCRONIZANDO ENLACE…';
+    gallery.classList.remove('resync');void gallery.offsetWidth;gallery.classList.add('resync');
+    clearTimeout(syncT);
+    syncT=setTimeout(function(){syncLabel.textContent='ENLACE ESTABLE · NODO 7';},900);
+    render();
+  });
+
+  /* ---------- TOAST ---------- */
+  var toastEl=document.getElementById('toast'),toastT=null;
+  function toast(msg){
+    toastEl.textContent=msg;toastEl.classList.add('show');
+    clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show');},3400);
+  }
+
+  /* ---------- LIGHTBOX ---------- */
+  var lb=document.getElementById('lightbox'),lbImg=document.getElementById('lbImg'),
+      lbCap=document.getElementById('lbCap'),lbMeta=document.getElementById('lbMeta');
+  function openLb(d){
+    lbImg.src=d.img;lbCap.textContent=d.cap;
+    lbMeta.textContent=d.meta+' · '+d.exp+' · '+d.w+' TESTIGOS';
+    lb.classList.add('open');document.body.style.overflow='hidden';
+  }
+  function closeLb(){lb.classList.remove('open');document.body.style.overflow='';lbImg.src='';}
+  lb.addEventListener('click',function(e){if(e.target===lb)closeLb();});
+  document.getElementById('lbClose').addEventListener('click',closeLb);
+  window.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb();});
+
+  /* ---------- GALERÍA: TESTIGOS + LIGHTBOX ---------- */
+  gallery.addEventListener('click',function(e){
+    var wb=e.target.closest('.w-btn');
+    if(wb){
+      var id=+wb.dataset.w;
+      var d=DATA.find(function(x){return x.id===id;});
+      if(!d||d.w>=50)return;
+      d.w++;
+      var num=gallery.querySelector('[data-num="'+id+'"]');
+      if(num){num.textContent=d.w;num.classList.remove('pop');void num.offsetWidth;num.classList.add('pop');}
+      if(d.w>=50){
+        wb.disabled=true;wb.textContent='✓ VERIFICADA';
+        var badge=wb.closest('.card').querySelector('.badge-anom');
+        badge.classList.add('verified');badge.innerHTML='<i></i>VERIFICADA';
+        toast('REGISTRO VERIFICADO — LA VERDAD YA NO PUEDE BORRARSE');
+      }
+      updateStats();
+      return;
+    }
+    var md=e.target.closest('.card-media');
+    if(md){
+      var dd=DATA.find(function(x){return x.id===+md.closest('.card').dataset.id;});
+      if(dd)openLb(dd);
+    }
+  });
+  gallery.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&e.target.classList.contains('card-media')){
+      var dd=DATA.find(function(x){return x.id===+e.target.closest('.card').dataset.id;});
+      if(dd)openLb(dd);
+    }
+  });
+
+  /* ---------- SUBIDA ---------- */
+  var dz=document.getElementById('dz'),fileInput=document.getElementById('fileInput'),
+      preview=document.getElementById('preview'),dzInfo=document.getElementById('dzInfo'),
+      statusEl=document.getElementById('status'),go=document.getElementById('go'),
+      bar=document.getElementById('bar'),progressLabel=document.getElementById('progressLabel');
+  var fileURL=null,busy=false;
+
+  function setStatus(msg,cls){statusEl.textContent=msg;statusEl.className='status'+(cls?' '+cls:'');}
+
+  function setFile(file){
+    if(!file)return;
+    if(!file.type||file.type.indexOf('image/')!==0){setStatus('ERROR: FORMATO NO RECONOCIDO. SOLO IMÁGENES.','bad blink');return;}
+    if(file.size>10*1024*1024){setStatus('ERROR: ARCHIVO DEMASIADO GRANDE. MÁX. 10 MB.','bad blink');return;}
+    var rd=new FileReader();
+    rd.onload=function(){
+      fileURL=rd.result;
+      preview.src=fileURL;preview.hidden=false;
+      dz.classList.add('has-file');
+      dzInfo.textContent='◉ '+file.name+' — CLIC PARA SUSTITUIR';
+      go.disabled=false;
+      setStatus('MATERIAL RECIBIDO. ASIGNA UN ALIAS Y TRANSMITE.','ok');
+    };
+    rd.readAsDataURL(file);
+  }
+
+  dz.addEventListener('click',function(){fileInput.click();});
+  dz.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click();}});
+  fileInput.addEventListener('change',function(){setFile(fileInput.files[0]);});
+  ['dragover','dragenter'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('drag');});});
+  ['dragleave','dragend'].forEach(function(ev){dz.addEventListener(ev,function(){dz.classList.remove('drag');});});
+  dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('drag');setFile(e.dataTransfer.files[0]);});
+  document.getElementById('upForm').addEventListener('submit',function(e){e.preventDefault();});
+
+  var PHASES=[[18,'ESTABLECIENDO CANAL CIFRADO…'],[42,'SUBIENDO NEGATIVO…'],[64,'ELIMINANDO METADATOS COMPROMETEDORES…'],[86,'VERIFICANDO COHERENCIA ÓPTICA…'],[100,'TRANSMISIÓN COMPLETA']];
+
+  go.addEventListener('click',function(){
+    if(busy)return;
+    if(!fileURL){setStatus('ERROR: NO SE DETECTA MATERIAL FOTOGRÁFICO.','bad blink');return;}
+    busy=true;go.disabled=true;bar.style.width='0%';
+    var p=0,pi=0;
+    var iv=setInterval(function(){
+      p+=3+Math.random()*7;
+      while(pi<PHASES.length&&p>=PHASES[pi][0]){progressLabel.textContent=PHASES[pi][1];pi++;}
+      if(p>=100){p=100;clearInterval(iv);finish();}
+      bar.style.width=p+'%';
+    },140);
+  });
+
+  function finish(){
+    var alias=(document.getElementById('alias').value.trim()||'ANÓNIMO-∅').toUpperCase();
+    var lugar=document.getElementById('lugar').value.trim()||'UBICACIÓN OMITIDA';
+    DATA.unshift({
+      id:Date.now(),img:fileURL,cat:'nueva',tag:'SIN VERIFICAR',exp:'EXP. DESCONOCIDA',w:0,
+      cap:'Registro recibido por el canal cifrado. Pendiente de clasificación. Si reconoces esta imagen, no lo digas en voz alta.',
+      meta:lugar.toUpperCase()+' · 13.08.2026',alias:alias
+    });
+    render();
+    setStatus('REGISTRO ACEPTADO. TU IDENTIDAD HA SIDO DESTRUIDA.','ok');
+    toast('PRUEBA AÑADIDA AL ARCHIVO — SECCIÓN «SIN VERIFICAR»');
+    document.querySelector('#filters button[data-f="nueva"]').click();
+    document.getElementById('archivo').scrollIntoView({behavior:'smooth'});
+    setTimeout(function(){
+      fileURL=null;preview.hidden=true;preview.src='';
+      dz.classList.remove('has-file');dzInfo.textContent='—';
+      go.disabled=false;busy=false;bar.style.width='0%';progressLabel.textContent='';
+      document.getElementById('alias').value='';document.getElementById('lugar').value='';
+      fileInput.value='';
+    },1400);
+  }
+
+  /* ---------- INIT ---------- */
+  render();
+})();
+</script>
+</body>
+</html>
