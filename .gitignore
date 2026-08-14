@@ -1,26 +1,57 @@
-# Sistema
+# ============ SISTEMAS OPERATIVOS ============
 .DS_Store
+.DS_Store?
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 desktop.ini
+$RECYCLE.BIN/
+*.lnk
 
-# Editores
+# ============ EDITORES E IDES ============
 .vscode/
 .idea/
 *.swp
-*.sublime-*
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
 
-# Entornos
+# ============ VARIABLES DE ENTORNO / SECRETS ============
 .env
 .env.local
+.env.*.local
+*.pem
+*.key
 
-# Dependencias (si las agregas)
+# ============ DEPENDENCIAS Y BUILDS ============
 node_modules/
 .cache/
 dist/
 build/
+out/
+coverage/
+.parcel-cache/
 
-# Logs
+# ============ LOGS ============
 *.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# OS generados
-._*
+# ============ ARCHIVOS TEMPORALES ============
+*.tmp
+*.bak
+*.orig
+tmp/
+temp/
+
+# ============ PAQUETES COMPRIMIDOS ============
+*.zip
+*.tar.gz
+*.rar
+
+# ============ EXCEPCIONES DEL PROYECTO ============
+# (este proyecto es 100% estático; lo anterior es preventivo)
