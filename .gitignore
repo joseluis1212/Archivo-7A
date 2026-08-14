@@ -1,0 +1,26 @@
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.sublime-*
+
+# Entornos
+.env
+.env.local
+
+# Dependencias (si las agregas)
+node_modules/
+.cache/
+dist/
+build/
+
+# Logs
+*.log
+
+# OS generados
+._*
