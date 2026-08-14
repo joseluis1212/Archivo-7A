@@ -1,753 +1,224 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SOL NOS MIENTE · Registro de Anomalías del Eclipse</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/anton@latest/400.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@latest/400.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@latest/500.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@latest/700.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/special-elite@latest/400.css">
-<style>
-  :root{
-    --bg:#050202;
-    --panel:#0d0605;
-    --panel2:#120806;
-    --line:#2b1310;
-    --red:#ff2a2a;
-    --red-dim:#8f1414;
-    --blood:#a30d0d;
-    --blood-deep:#6e0000;
-    --amber:#ffaa00;
-    --text:#e8e0da;
-    --muted:#8a746c;
-    --mono:'IBM Plex Mono',monospace;
-    --disp:'Anton',sans-serif;
-    --type:'Special Elite',serif;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  ::selection{background:var(--blood);color:#fff}
-  ::-webkit-scrollbar{width:10px;background:#0a0404}
-  ::-webkit-scrollbar-thumb{background:var(--blood-deep);border:2px solid #0a0404;border-radius:6px}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--mono);
-    font-size:15px;
-    line-height:1.6;
-    overflow-x:hidden;
-    min-height:100vh;
-  }
-  /* ============ CAPAS ATMOSFÉRICAS ============ */
-  #starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
-  .scanlines{
-    position:fixed;inset:0;z-index:40;pointer-events:none;opacity:.14;
-    background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.9) 2px 3px);
-    mix-blend-mode:multiply;
-  }
-  .noise{
-    position:fixed;inset:0;z-index:41;pointer-events:none;opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
-  }
-  .vignette{
-    position:fixed;inset:0;z-index:39;pointer-events:none;
-    background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(20,0,0,.55) 100%);
-  }
-  main,header.topbar,.ticker,footer{position:relative;z-index:10}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EL SOL NOS MIENTE · Registro de Anomalías del Eclipse</title>
 
-  /* ============ TICKER DE ADVERTENCIA ============ */
-  .ticker{
-    background:var(--blood);color:#0a0000;overflow:hidden;
-    border-bottom:1px solid #000;white-space:nowrap;
-    font-weight:700;font-size:.72rem;letter-spacing:.14em;
-    padding:8px 0;text-transform:uppercase;
-  }
-  .ticker-track{display:inline-flex;gap:3rem;animation:ticker 38s linear infinite;will-change:transform}
-  .ticker:hover .ticker-track{animation-play-state:paused}
-  .ticker-track span{display:inline-flex;align-items:center;gap:3rem}
-  @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    <!-- Preconexiones para mejorar rendimiento -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  /* ============ TOPBAR ============ */
-  .topbar{
-    display:flex;justify-content:space-between;align-items:center;gap:1rem;
-    padding:.8rem clamp(1rem,4vw,3rem);
-    border-bottom:1px solid var(--line);
-    background:rgba(8,3,3,.85);backdrop-filter:blur(4px);
-    position:sticky;top:0;z-index:50;
-  }
-  .brand{font-family:var(--disp);font-size:1rem;letter-spacing:.18em;color:var(--red)}
-  .brand small{color:var(--muted);font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;margin-left:.6rem}
-  .live{font-size:.68rem;letter-spacing:.12em;color:var(--muted)}
-  .live b{color:var(--amber);font-weight:700}
-  .live .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:.4rem;animation:blink 1.2s steps(2) infinite;vertical-align:middle}
+    <!-- Fuentes con display=swap para evitar bloqueo -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/anton@latest/400.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@latest/400.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@latest/500.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@latest/700.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/special-elite@latest/400.css" media="print" onload="this.media='all'">
 
-  /* ============ HERO ============ */
-  .hero{
-    display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(1.5rem,4vw,4rem);
-    align-items:center;
-    padding:clamp(2.5rem,6vw,5rem) clamp(1rem,5vw,4rem) clamp(2rem,5vw,4rem);
-    max-width:1280px;margin:0 auto;
-  }
-  .stamp{
-    display:inline-block;font-size:.65rem;letter-spacing:.22em;color:var(--amber);
-    border:1px dashed var(--amber);padding:.35rem .8rem;transform:rotate(-1.5deg);
-    margin-bottom:1.4rem;background:rgba(255,170,0,.05);
-  }
-  h1.glitch{
-    font-family:var(--disp);
-    font-size:clamp(3rem,9.5vw,7.2rem);
-    line-height:.95;letter-spacing:.01em;color:var(--text);
-    text-transform:uppercase;position:relative;
-    text-shadow:0 0 30px rgba(255,42,42,.25);
-    animation:flickerTitle 6s infinite;
-  }
-  h1.glitch::before,h1.glitch::after{
-    content:attr(data-text);position:absolute;inset:0;pointer-events:none;
-  }
-  h1.glitch::before{color:var(--red);z-index:-1;animation:gl1 3.1s steps(1) infinite;opacity:.8}
-  h1.glitch::after{color:var(--blood-deep);z-index:-2;animation:gl2 2.7s steps(1) infinite}
-  @keyframes gl1{
-    0%,88%{transform:none;clip-path:none}
-    89%{transform:translate(-5px,2px);clip-path:inset(10% 0 55% 0)}
-    92%{transform:translate(4px,-2px);clip-path:inset(60% 0 15% 0)}
-    95%{transform:translate(-3px,1px);clip-path:inset(30% 0 40% 0)}
-    98%,100%{transform:none;clip-path:none}
-  }
-  @keyframes gl2{
-    0%,80%{transform:none}
-    82%{transform:translate(5px,-3px);clip-path:inset(45% 0 20% 0)}
-    86%{transform:translate(-4px,3px);clip-path:inset(5% 0 75% 0)}
-    90%,100%{transform:none}
-  }
-  @keyframes flickerTitle{
-    0%,93%,97%,100%{opacity:1}
-    94%{opacity:.55}
-    96%{opacity:.8}
-  }
-  .lead{
-    margin:1.6rem 0 1.4rem;font-size:clamp(.95rem,1.6vw,1.1rem);
-    color:var(--muted);max-width:34rem;
-  }
-  .lead strong{color:var(--text);border-bottom:2px solid var(--blood)}
-  .warning-box{
-    border:1px solid var(--amber);
-    background:
-      repeating-linear-gradient(45deg,rgba(255,170,0,.12) 0 12px,transparent 12px 24px),
-      rgba(255,170,0,.04);
-    padding:1rem 1.2rem;max-width:34rem;
-    position:relative;
-  }
-  .warning-box::before,.warning-box::after{
-    content:"";position:absolute;left:0;right:0;height:6px;
-    background:repeating-linear-gradient(45deg,var(--amber) 0 10px,#0a0000 10px 20px);
-  }
-  .warning-box::before{top:-7px}.warning-box::after{bottom:-7px}
-  .warning-title{font-family:var(--disp);letter-spacing:.14em;color:var(--amber);font-size:.95rem;margin-bottom:.4rem}
-  .warning-box p{font-size:.82rem;color:var(--text)}
-  .warning-box em{color:var(--red);font-style:normal;font-weight:700}
-  .btn-soul{
-    display:inline-block;margin-top:1.8rem;
-    font-family:var(--disp);font-size:clamp(1rem,2vw,1.3rem);letter-spacing:.12em;
-    color:#fff;text-decoration:none;text-align:center;
-    background:linear-gradient(180deg,#d41414,var(--blood) 55%,var(--blood-deep));
-    border:1px solid #ff5050;border-radius:4px;
-    padding:.95rem 2.2rem;cursor:pointer;
-    box-shadow:0 0 22px rgba(255,30,30,.4),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -8px 18px rgba(0,0,0,.5);
-    animation:pulseBtn 2.2s ease-in-out infinite;
-    transition:transform .15s,box-shadow .2s,filter .2s;
-    text-transform:uppercase;
-  }
-  .btn-soul:hover{transform:translateY(-2px) scale(1.02);filter:brightness(1.15);box-shadow:0 0 40px rgba(255,40,40,.7),inset 0 1px 0 rgba(255,255,255,.25)}
-  .btn-soul:active{transform:translateY(1px) scale(.99)}
-  @keyframes pulseBtn{0%,100%{box-shadow:0 0 18px rgba(255,30,30,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -8px 18px rgba(0,0,0,.5)}50%{box-shadow:0 0 38px rgba(255,30,30,.65),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -8px 18px rgba(0,0,0,.5)}}
+    <!-- CSS principal (extraído del inline, ahora en archivo externo) -->
+    <link rel="stylesheet" href="css/styles.css">
 
-  /* Eclipse CSS */
-  .hero-right{display:flex;flex-direction:column;align-items:center;gap:1.6rem}
-  .eclipse{position:relative;width:min(360px,72vw);aspect-ratio:1;filter:drop-shadow(0 0 60px rgba(255,60,20,.25))}
-  .corona{
-    position:absolute;inset:4%;border-radius:50%;
-    background:radial-gradient(circle,rgba(255,140,60,.4),rgba(255,42,42,.14) 45%,transparent 72%);
-    filter:blur(6px);animation:breathe 4.5s ease-in-out infinite;
-  }
-  @keyframes breathe{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.06);opacity:1}}
-  .sun-disc{
-    position:absolute;inset:18%;border-radius:50%;background:#000;
-    box-shadow:0 0 60px 12px rgba(255,70,30,.55),0 0 140px 40px rgba(255,42,42,.22),inset 0 0 45px rgba(255,80,30,.12);
-  }
-  .ring{position:absolute;inset:16.5%;border-radius:50%;border:1px dashed rgba(255,170,0,.4);animation:spin 46s linear infinite}
-  .ring.r2{inset:11%;border-color:rgba(255,42,42,.22);animation:spin 70s linear infinite reverse}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .orb{
-    position:absolute;top:46%;left:24%;width:9%;aspect-ratio:1;border-radius:50%;background:#000;
-    box-shadow:0 0 10px rgba(0,0,0,.9),0 0 5px rgba(255,60,30,.5);
-    animation:cross 11s ease-in-out infinite;
-  }
-  @keyframes cross{0%{left:22%;opacity:0}8%{opacity:1}50%{left:66%}92%{opacity:1}100%{left:72%;opacity:0}}
-  .hero-stats{
-    display:grid;grid-template-columns:repeat(4,auto);gap:1px;background:var(--line);
-    border:1px solid var(--line);
-  }
-  .hstat{background:var(--panel);padding:.6rem 1rem;text-align:center;min-width:96px}
-  .hstat b{display:block;font-family:var(--disp);font-size:1.25rem;color:var(--red);letter-spacing:.05em}
-  .hstat span{font-size:.58rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
-  .hstat.zero b{color:var(--amber)}
-
-  /* ============ SECCIONES ============ */
-  section{max-width:1280px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,5vw,4rem)}
-  .section-head{display:flex;align-items:baseline;gap:1.2rem;flex-wrap:wrap;margin-bottom:2rem;border-bottom:1px solid var(--line);padding-bottom:1rem}
-  .section-head .num{font-size:.68rem;letter-spacing:.25em;color:var(--red);border:1px solid var(--red-dim);padding:.3rem .7rem}
-  .section-head h2{font-family:var(--disp);font-size:clamp(1.7rem,4.5vw,2.8rem);letter-spacing:.03em;text-transform:uppercase;color:var(--text)}
-  .section-head .sub{width:100%;font-size:.75rem;color:var(--muted);letter-spacing:.08em}
-
-  /* ============ SUBIDA ============ */
-  .upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;align-items:stretch}
-  .dropzone{
-    border:2px dashed var(--red-dim);background:var(--panel);
-    min-height:320px;position:relative;cursor:pointer;overflow:hidden;
-    display:flex;align-items:center;justify-content:center;text-align:center;
-    transition:border-color .2s,background .2s,transform .2s;
-  }
-  .dropzone:hover,.dropzone.drag{border-color:var(--red);background:var(--panel2);transform:scale(1.005)}
-  .dz-inner{padding:2rem;pointer-events:none}
-  .dz-icon{font-size:2.6rem;display:block;margin-bottom:.8rem;filter:grayscale(.3)}
-  .dz-inner p{color:var(--muted);font-size:.82rem;letter-spacing:.06em}
-  .dz-inner p b{color:var(--red)}
-  .dz-inner .hint{font-size:.65rem;margin-top:.8rem;color:#5c4a44}
-  #preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.85) contrast(1.1)}
-  .dz-overlay{
-    position:absolute;left:0;right:0;bottom:0;padding:.6rem 1rem;
-    background:linear-gradient(transparent,rgba(0,0,0,.92));
-    color:var(--amber);font-size:.7rem;letter-spacing:.1em;display:none;
-  }
-  .dropzone.has-file .dz-overlay{display:block}
-  .dropzone.has-file .dz-inner{display:none}
-  .upload-form{display:flex;flex-direction:column;gap:1rem;background:var(--panel);border:1px solid var(--line);padding:1.6rem}
-  .upload-form label{font-size:.65rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
-  .upload-form label b{color:var(--red)}
-  .upload-form input[type=text]{
-    background:#0a0404;border:1px solid var(--line);color:var(--text);
-    font-family:var(--mono);font-size:.88rem;padding:.8rem 1rem;outline:none;
-    transition:border-color .2s,box-shadow .2s;
-  }
-  .upload-form input[type=text]:focus{border-color:var(--red);box-shadow:0 0 14px rgba(255,42,42,.25)}
-  .upload-form input::placeholder{color:#5c4a44;font-family:var(--type)}
-  #go{
-    font-family:var(--disp);font-size:clamp(1.05rem,2vw,1.35rem);letter-spacing:.12em;
-    color:#fff;background:linear-gradient(180deg,#d41414,var(--blood) 55%,var(--blood-deep));
-    border:1px solid #ff5050;border-radius:4px;padding:1rem;cursor:pointer;
-    text-transform:uppercase;
-    box-shadow:0 0 22px rgba(255,30,30,.4),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -8px 18px rgba(0,0,0,.5);
-    animation:pulseBtn 2.2s ease-in-out infinite;
-    transition:transform .15s,filter .2s;
-  }
-  #go:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.18)}
-  #go:disabled{filter:grayscale(.8) brightness(.6);cursor:not-allowed;animation:none}
-  .progress{height:8px;background:#1a0b09;border:1px solid var(--line);position:relative;overflow:hidden}
-  .progress i{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--blood-deep),var(--red));box-shadow:0 0 12px rgba(255,42,42,.7);transition:width .5s steps(8)}
-  #progressLabel{font-size:.68rem;color:var(--amber);letter-spacing:.1em;min-height:1.2em}
-  .status{
-    border-left:3px solid var(--line);background:#0a0404;padding:.9rem 1rem;
-    font-size:.85rem;color:var(--muted);min-height:3.4rem;
-  }
-  .status.ok{border-color:var(--amber);color:var(--text)}
-  .status.bad{border-color:var(--red);color:#ff6666}
-  .status.blink{animation:blink 1s steps(2) infinite}
-  @keyframes blink{50%{opacity:.45}}
-  .form-note{font-size:.63rem;color:#5c4a44;letter-spacing:.06em}
-
-  /* ============ GALERÍA ============ */
-  .filters{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.4rem;align-items:center}
-  .filters button{
-    font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
-    background:transparent;color:var(--muted);border:1px solid var(--line);
-    padding:.6rem 1.1rem;cursor:pointer;transition:all .2s;
-  }
-  .filters button:hover{border-color:var(--red);color:var(--text)}
-  .filters button.active{background:var(--blood);border-color:var(--red);color:#fff;box-shadow:0 0 16px rgba(255,30,30,.4)}
-  .filters button.danger{border-color:var(--red-dim);color:var(--red)}
-  .filters button.danger.active{background:var(--blood);color:#fff}
-  #syncLabel{margin-left:auto;font-size:.68rem;color:var(--amber);letter-spacing:.14em;animation:blink .5s steps(2) infinite}
-  #galleryCount{width:100%;font-size:.63rem;color:#5c4a44;letter-spacing:.14em}
-  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
-  .gallery.resync{animation:resync .45s linear}
-  @keyframes resync{0%{opacity:1}20%{opacity:.12}45%{opacity:.85}70%{opacity:.2}100%{opacity:1}}
-  .card{
-    background:var(--panel);border:1px solid var(--line);
-    display:flex;flex-direction:column;
-    transition:transform .25s,box-shadow .25s,border-color .25s;
-    transform:rotate(var(--tilt,0deg));
-  }
-  .card:nth-child(3n){--tilt:.7deg}
-  .card:nth-child(4n){--tilt:-.6deg}
-  .card:nth-child(7n){--tilt:.4deg}
-  .card:hover{transform:rotate(0deg) translateY(-6px);border-color:var(--red-dim);box-shadow:0 12px 40px rgba(0,0,0,.7),0 0 24px rgba(255,30,30,.18)}
-  .card-media{position:relative;aspect-ratio:1/.82;overflow:hidden;cursor:crosshair;background:#000}
-  .card-media img{width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(1.08);transition:transform .5s,filter .5s}
-  .card:hover .card-media img{transform:scale(1.05);filter:saturate(1.05) contrast(1.15)}
-  .card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(5,2,2,.85));pointer-events:none}
-  .badge-anom{
-    position:absolute;top:.6rem;right:.6rem;z-index:2;
-    background:rgba(10,0,0,.85);border:1px solid var(--red);color:var(--red);
-    font-size:.6rem;letter-spacing:.14em;padding:.28rem .55rem;
-    display:flex;align-items:center;gap:.4rem;
-  }
-  .badge-anom i{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1s steps(2) infinite}
-  .badge-tag{
-    position:absolute;top:.6rem;left:.6rem;z-index:2;
-    background:rgba(10,0,0,.85);border:1px dashed var(--muted);color:var(--muted);
-    font-size:.58rem;letter-spacing:.14em;padding:.28rem .55rem;transform:rotate(-2deg);
-  }
-  .badge-tag.nofiltro{border-color:var(--amber);color:var(--amber)}
-  .exp{position:absolute;bottom:.5rem;left:.7rem;z-index:2;font-size:.6rem;letter-spacing:.18em;color:#6b564f}
-  .card-caption{
-    font-family:var(--type);font-size:.92rem;color:var(--text);
-    padding:1rem 1rem .6rem;line-height:1.5;min-height:3.6em;
-  }
-  .card-witness{border-top:1px dashed var(--line);margin:0 1rem;padding:.8rem 0}
-  .w-num{font-family:var(--disp);font-size:1.7rem;color:var(--red);letter-spacing:.04em;display:inline-block}
-  .w-num.pop{animation:pop .45s cubic-bezier(.2,2.2,.4,1)}
-  @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.5);color:var(--amber)}100%{transform:scale(1)}}
-  .w-label{font-size:.62rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:.1rem 0 .6rem}
-  .w-btn{
-    font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;
-    background:transparent;border:1px solid var(--red-dim);color:var(--red);
-    padding:.45rem .8rem;cursor:pointer;transition:all .2s;text-transform:uppercase;
-  }
-  .w-btn:hover:not(:disabled){background:var(--blood);color:#fff;border-color:var(--red);box-shadow:0 0 12px rgba(255,30,30,.4)}
-  .w-btn:disabled{border-color:#3a2a20;color:#6b564f;cursor:default}
-  .card-meta{padding:0 1rem .9rem;font-size:.62rem;color:#5c4a44;letter-spacing:.1em}
-
-  /* ============ FOOTER ============ */
-  footer{
-    border-top:1px solid var(--line);margin-top:3rem;
-    padding:2.5rem clamp(1rem,5vw,4rem);
-    display:flex;flex-wrap:wrap;gap:2rem;justify-content:space-between;
-    background:rgba(8,3,3,.9);font-size:.68rem;color:var(--muted);letter-spacing:.1em;
-  }
-  footer .f-brand{font-family:var(--disp);color:var(--red);letter-spacing:.18em;font-size:.9rem}
-  footer .blinkline{color:var(--red);animation:blink 1.4s steps(2) infinite}
-  footer .coords{color:#5c4a44}
-
-  /* ============ LIGHTBOX ============ */
-  #lightbox{position:fixed;inset:0;z-index:100;background:rgba(2,0,0,.94);display:none;align-items:center;justify-content:center;padding:2rem;cursor:zoom-out}
-  #lightbox.open{display:flex;animation:lbIn .25s ease}
-  @keyframes lbIn{from{opacity:0}to{opacity:1}}
-  .lb-box{max-width:860px;width:100%;background:var(--panel);border:1px solid var(--red-dim);box-shadow:0 0 80px rgba(255,30,30,.25)}
-  .lb-box img{width:100%;max-height:62vh;object-fit:contain;background:#000;display:block}
-  .lb-info{padding:1.2rem 1.4rem;display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:center}
-  .lb-info .cap{font-family:var(--type);font-size:1rem;color:var(--text)}
-  .lb-info .meta{font-size:.65rem;color:var(--muted);letter-spacing:.12em}
-  .lb-close{position:absolute;top:1.2rem;right:1.4rem;background:var(--blood);border:1px solid var(--red);color:#fff;font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;padding:.6rem 1rem;cursor:pointer}
-  .lb-close:hover{background:var(--red)}
-
-  /* ============ TOAST ============ */
-  #toast{
-    position:fixed;bottom:1.5rem;left:50%;transform:translate(-50%,150%);z-index:120;
-    background:#0a0404;border:1px solid var(--red);color:var(--text);
-    font-size:.72rem;letter-spacing:.1em;padding:.8rem 1.4rem;
-    box-shadow:0 0 30px rgba(255,30,30,.4);transition:transform .35s cubic-bezier(.2,1.4,.4,1);
-    max-width:90vw;text-align:center;
-  }
-  #toast.show{transform:translate(-50%,0)}
-
-  /* ============ ADICIONES ============ */
-  .badge-anom.verified{border-color:var(--amber);color:var(--amber)}
-  .badge-anom.verified i{background:var(--amber);animation:none}
-  #fileInput{display:none}
-  .card-media:focus-visible,.w-btn:focus-visible,.btn-soul:focus-visible,.filters button:focus-visible,.dropzone:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
-
-  @media(max-width:900px){
-    .hero{grid-template-columns:1fr}
-    .hero-right{order:-1}
-    .upload-grid{grid-template-columns:1fr}
-    .hero-stats{grid-template-columns:repeat(2,1fr);width:100%}
-    .topbar{flex-direction:column;gap:.4rem}
-  }
-</style>
+    <!-- Fallback para navegadores sin JS -->
+    <noscript>
+        <style>
+            .js-only { display: none !important; }
+            .no-js-msg { display: block !important; }
+        </style>
+    </noscript>
 </head>
 <body>
 
-<canvas id="starfield"></canvas>
-<div class="vignette"></div>
-<div class="scanlines"></div>
-<div class="noise"></div>
+    <!-- Capas atmosféricas (fondo, estrellas, ruido, viñeta) -->
+    <div id="starfield" aria-hidden="true"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
 
-<!-- ============ TICKER ============ -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <span>⚠ NO MIRES DIRECTAMENTE AL ECLIPSE ⚠ EL MINISTERIO NIEGA EL SEGUNDO CONTACTO ⚠ 37 TESTIGOS DESAPARECIDOS EN LAS ÚLTIMAS 24 HORAS ⚠ LA CORONA NO TIENE ESAS FORMAS ⚠ SI TU SOMBRA NO COINCIDE CON TU CUERPO, REPÓRTALO DE INMEDIATO ⚠ LOS FILTROS OFICIALES NO PROTEGEN: OCULTAN ⚠</span>
-    <span>⚠ NO MIRES DIRECTAMENTE AL ECLIPSE ⚠ EL MINISTERIO NIEGA EL SEGUNDO CONTACTO ⚠ 37 TESTIGOS DESAPARECIDOS EN LAS ÚLTIMAS 24 HORAS ⚠ LA CORONA NO TIENE ESAS FORMAS ⚠ SI TU SOMBRA NO COINCIDE CON TU CUERPO, REPÓRTALO DE INMEDIATO ⚠ LOS FILTROS OFICIALES NO PROTEGEN: OCULTAN ⚠</span>
-  </div>
-</div>
-
-<!-- ============ TOPBAR ============ -->
-<header class="topbar">
-  <div class="brand">EL SOL NOS MIENTE <small>REGISTRO DE ANOMALÍAS · EXP-2026-∞</small></div>
-  <div class="live"><span class="dot"></span>SEÑAL ACTIVA · <b id="clock">--:--:--</b> · NODO 7</div>
-</header>
-
-<main>
-  <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div>
-      <p class="stamp">✷ MATERIAL CONFISCADO · COPIA Nº 3 DE 3 ✷</p>
-      <h1 class="glitch" data-text="EL SOL NOS MIENTE">EL SOL NOS MIENTE</h1>
-      <p class="lead">El 12 de agosto de 2026, durante 1 min 42 s de totalidad, <strong>cámaras de toda la península registraron lo mismo</strong>. Las agencias lo llaman «refracción atmosférica inusual». Nosotros lo llamamos prueba. Este es el archivo público de lo que el cielo intentó decirnos.</p>
-      <div class="warning-box">
-        <div class="warning-title">⚠ AVISO DE SEGURIDAD</div>
-        <p>Si observaste el eclipse sin protección y desde entonces <em>tu sombra llega antes que tú</em>, no leas esta página a oscuras. Y sobre todo: <em>no vuelvas a mirar al sol</em>.</p>
-      </div>
-      <a class="btn-soul" href="#transmitir">▲ TRANSMITIR MI PRUEBA</a>
-    </div>
-    <div class="hero-right">
-      <div class="eclipse" aria-hidden="true">
-        <div class="corona"></div>
-        <div class="sun-disc"></div>
-        <div class="ring"></div>
-        <div class="ring r2"></div>
-        <div class="orb"></div>
-      </div>
-      <div class="hero-stats">
-        <div class="hstat"><b id="stReg">00</b><span>Registros</span></div>
-        <div class="hstat"><b id="stWit">000</b><span>Testigos</span></div>
-        <div class="hstat"><b id="stDays">00</b><span>Días post-evento</span></div>
-        <div class="hstat zero"><b>00</b><span>Refutaciones</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ SECCIÓN 01: SUBIDA ============ -->
-  <section id="transmitir">
-    <div class="section-head">
-      <span class="num">SECCIÓN 01</span>
-      <h2>Transmite tu prueba</h2>
-      <p class="sub">Canal cifrado · Tu identidad se destruye al recibir el archivo · No subas la misma foto dos veces: ellas también lo saben.</p>
-    </div>
-    <div class="upload-grid">
-      <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Subir fotografía del eclipse">
-        <img id="preview" alt="" hidden>
-        <div class="dz-inner">
-          <span class="dz-icon">📷</span>
-          <p><b>ARRASTRA TU FOTOGRAFÍA</b><br>o pulsa para seleccionar</p>
-          <p class="hint">JPG · PNG · TIFF — MÁX. 10 MB — RECOMENDADO: REVELADO QUÍMICO ESCANEADO</p>
+    <!-- ============ TICKER ============ -->
+    <section class="ticker" aria-label="Advertencia de emergencia" role="alert">
+        <div class="ticker-track" aria-hidden="true">
+            <span>
+                ⚠ ADVERTENCIA DE ANOMALÍA SOLAR · EL SOL NOS MIENTE · NO MIRAR DIRECTAMENTE ·
+                ⚠ REGISTRO DE ECLIPSE · AVISO DE SEGURIDAD · SOMBRA ANÓMALA DETECTADA ·
+                ⚠ SOL NOS MIENTE · NO MIRAR DIRECTAMENTE · ECLIPSE ANÓMALO ·
+            </span>
+            <span>
+                ⚠ ADVERTENCIA DE ANOMALÍA SOLAR · EL SOL NOS MIENTE · NO MIRAR DIRECTAMENTE ·
+                ⚠ REGISTRO DE ECLIPSE · AVISO DE SEGURIDAD · SOMBRA ANÓMALA DETECTADA ·
+                ⚠ SOL NOS MIENTE · NO MIRAR DIRECTAMENTE · ECLIPSE ANÓMALO ·
+            </span>
         </div>
-        <div class="dz-overlay" id="dzInfo">—</div>
-      </div>
-      <input type="file" id="fileInput" accept="image/*">
-      <form class="upload-form" id="upForm" novalidate>
-        <label for="alias">ALIAS / CÓDIGO DE TESTIGO <b>*</b></label>
-        <input type="text" id="alias" maxlength="28" placeholder="p. ej. «Observador-Δ7»" autocomplete="off">
-        <label for="lugar">ÚLTIMA UBICACIÓN CONOCIDA</label>
-        <input type="text" id="lugar" maxlength="40" placeholder="p. ej. «Sierra de Gredos, km 41»" autocomplete="off">
+    </section>
+
+    <!-- ============ TOPBAR ============ -->
+    <header class="topbar" role="banner">
+        <div class="brand">
+            ARCHIVO 7A <small>· expediente clasificado</small>
+        </div>
+        <div class="live" aria-live="polite">
+            <span class="dot" aria-hidden="true"></span>
+            <b>EN DIRECTO</b> · <span id="liveCounter">0</span> testigos
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-left">
+                <div class="stamp">⚠ ANOMALÍA CLASE 7A</div>
+                <h1 class="glitch" id="hero-title" data-text="EL SOL NOS MIENTE">EL SOL NOS MIENTE</h1>
+                <p class="lead">
+                    <strong>Registro colaborativo de anomalías</strong> durante el eclipse solar del
+                    <time datetime="2026-08-12">12 de agosto de 2026</time>.
+                    Testimonios, sombras y evidencias que <strong>el Ministerio niega</strong>.
+                </p>
+                <div class="warning-box" role="note">
+                    <div class="warning-title">⚠ PRECAUCIÓN EXTREMA</div>
+                    <p>
+                        <em>NO MIRAR DIRECTAMENTE</em> al sol durante el eclipse.
+                        Las sombras pueden mostrar <em>comportamiento anómalo</em>.
+                        Reporta cualquier irregularidad.
+                    </p>
+                </div>
+                <a href="#upload" class="btn-soul" role="button">📡 SUBIR EVIDENCIA</a>
+            </div>
+
+            <div class="hero-right">
+                <!-- Ilustración del eclipse (solo CSS) -->
+                <div class="eclipse" aria-hidden="true">
+                    <div class="corona"></div>
+                    <div class="sun-disc"></div>
+                    <div class="ring"></div>
+                    <div class="ring r2"></div>
+                    <div class="orb"></div>
+                </div>
+
+                <!-- Estadísticas rápidas -->
+                <div class="hero-stats" role="list">
+                    <div class="hstat" role="listitem">
+                        <b id="statTestimonios">0</b>
+                        <span>Testimonios</span>
+                    </div>
+                    <div class="hstat" role="listitem">
+                        <b id="statSombras">0</b>
+                        <span>Sombras</span>
+                    </div>
+                    <div class="hstat zero" role="listitem">
+                        <b id="statVerificadas">0</b>
+                        <span>Verificadas</span>
+                    </div>
+                    <div class="hstat" role="listitem">
+                        <b id="statAlertas">⚠</b>
+                        <span>Alertas activas</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ SECCIÓN SUBIDA ============ -->
+        <section id="upload" aria-labelledby="upload-title">
+            <div class="section-head">
+                <span class="num">📡 01</span>
+                <h2 id="upload-title">Subir evidencia</h2>
+                <div class="sub">Tu testimonio puede cambiar la narrativa oficial</div>
+            </div>
+
+            <div class="upload-grid">
+                <!-- Dropzone -->
+                <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Arrastra o haz clic para subir una imagen">
+                    <div class="dz-inner">
+                        <span class="dz-icon" aria-hidden="true">🕳️</span>
+                        <p><b>Arrastra</b> tu evidencia o <b>haz clic</b></p>
+                        <p class="hint">Formatos: JPG, PNG, WEBP · Máx. 5MB</p>
+                    </div>
+                    <img id="preview" src="" alt="Vista previa de la evidencia" style="display:none;">
+                    <div class="dz-overlay" id="dzOverlay">✅ Archivo listo</div>
+                    <input type="file" id="fileInput" accept="image/*" aria-label="Seleccionar archivo de evidencia">
+                </div>
+
+                <!-- Formulario de metadatos -->
+                <form class="upload-form" id="uploadForm" novalidate>
+                    <label for="testimonio">Testimonio <b>*</b></label>
+                    <input type="text" id="testimonio" placeholder="Describe lo que viste..." required aria-required="true">
+
+                    <label for="testigo">Nombre o código <b>*</b></label>
+                    <input type="text" id="testigo" placeholder="Ej. Testigo 7A, Anónimo, etc." required aria-required="true">
+
+                    <label for="tipo">Tipo de anomalía</label>
+                    <input type="text" id="tipo" placeholder="Ej. sombra, destello, desaparición...">
+
+                    <button type="submit" id="go" disabled>🚨 Enviar al archivo</button>
+
+                    <div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <i id="progressBar" style="width:0%;"></i>
+                    </div>
+                    <div id="progressLabel" aria-live="polite">Esperando evidencia...</div>
+
+                    <div class="status" id="status" role="status">🟡 Esperando tu testimonio</div>
+                    <div class="form-note">* Campos obligatorios. Tus datos serán anonimizados.</div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ============ GALERÍA ============ -->
+        <section id="gallery-section" aria-labelledby="gallery-title">
+            <div class="section-head">
+                <span class="num">🕯️ 02</span>
+                <h2 id="gallery-title">Evidencias registradas</h2>
+                <div class="sub">Cada imagen y testimonio es una pieza del rompecabezas</div>
+            </div>
+
+            <div class="filters" role="tablist" aria-label="Filtrar evidencias">
+                <button role="tab" aria-selected="true" data-filter="all" class="active">Todas</button>
+                <button role="tab" aria-selected="false" data-filter="sombra">Sombras</button>
+                <button role="tab" aria-selected="false" data-filter="destello">Destellos</button>
+                <button role="tab" aria-selected="false" data-filter="desaparicion">Desapariciones</button>
+                <button role="tab" aria-selected="false" data-filter="otro">Otro</button>
+                <button role="tab" aria-selected="false" data-filter="verificado" class="danger">✅ Verificadas</button>
+                <span id="syncLabel">🔄 sincronizando...</span>
+            </div>
+            <div id="galleryCount" aria-live="polite">0 evidencias</div>
+
+            <div class="gallery" id="gallery" role="list">
+                <!-- Las tarjetas se generarán dinámicamente con JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer role="contentinfo">
         <div>
-          <div class="progress"><i id="bar"></i></div>
-          <p id="progressLabel" aria-live="polite"></p>
+            <div class="f-brand">ARCHIVO 7A</div>
+            <div>Expediente clasificado · <span class="blinkline">⚠ EL SOL NOS MIENTE</span></div>
         </div>
-        <div class="status" id="status" aria-live="polite">CANAL ABIERTO — ESPERANDO MATERIAL…</div>
-        <button type="button" id="go" disabled>⬆ TRANSMITIR AL ARCHIVO</button>
-        <p class="form-note">Al transmitir aceptas que el original sea eliminado de este plano de la red. No podemos proteger tu copia física.</p>
-      </form>
+        <div>
+            <div>© 2026 · Ministerio de la Verdad</div>
+            <div class="coords">Coordenadas: 34.6037° S, 58.3816° O</div>
+        </div>
+        <div>
+            <div>Versión <span id="version">0.7.0</span></div>
+            <div>Última actualización: <time datetime="2026-08-13">13/08/2026</time></div>
+        </div>
+    </footer>
+
+    <!-- ============ LIGHTBOX ============ -->
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="Ampliación de evidencia">
+        <div class="lb-box">
+            <img id="lbImage" src="" alt="Ampliación de evidencia">
+            <div class="lb-info">
+                <div class="cap" id="lbCaption">Testimonio</div>
+                <div class="meta" id="lbMeta">ID · Tipo</div>
+            </div>
+        </div>
+        <button class="lb-close" id="lbClose" aria-label="Cerrar ampliación">✕ CERRAR</button>
     </div>
-  </section>
 
-  <!-- ============ SECCIÓN 02: GALERÍA ============ -->
-  <section id="archivo">
-    <div class="section-head">
-      <span class="num">SECCIÓN 02</span>
-      <h2>Archivo de anomalías</h2>
-      <p class="sub">Cada registro necesita testigos. Pulsa «+1 TESTIGO» si tú también lo viste. Al llegar a 50, el registro queda verificado para siempre.</p>
-    </div>
-    <div class="filters" id="filters">
-      <button data-f="all" class="active">Todas</button>
-      <button data-f="grave">Anomalía grave</button>
-      <button data-f="oficial">Archivo oficial</button>
-      <button data-f="nueva" class="danger">Sin verificar</button>
-      <span id="syncLabel">ENLACE ESTABLE · NODO 7</span>
-      <span id="galleryCount"></span>
-    </div>
-    <div class="gallery" id="gallery"></div>
-  </section>
-</main>
+    <!-- ============ TOAST ============ -->
+    <div id="toast" role="alert" aria-live="assertive">Mensaje</div>
 
-<!-- ============ FOOTER ============ -->
-<footer>
-  <div>
-    <div class="f-brand">EL SOL NOS MIENTE</div>
-    <p>RED DE OBSERVACIÓN CIVIL INDEPENDIENTE.<br>NINGÚN GOBIERNO FINANCIA ESTO. NINGUNO LO PERMITIRÁ.</p>
-  </div>
-  <div>
-    <p class="blinkline">● GRABANDO DESDE EL 12.08.2026</p>
-    <p class="coords">40.4168° N / 3.7038° O — ÚLTIMA RECEPCIÓN 03:14:07</p>
-  </div>
-  <div>
-    <p>SI ESTE SITIO DESAPARECE, BUSCA LA COPIA Nº 4.</p>
-    <p>NO MIRES ARRIBA. YA ES TARDE.</p>
-  </div>
-</footer>
-
-<!-- ============ LIGHTBOX ============ -->
-<div id="lightbox" role="dialog" aria-modal="true" aria-label="Registro ampliado">
-  <button class="lb-close" id="lbClose">✕ CERRAR</button>
-  <div class="lb-box">
-    <img id="lbImg" alt="Registro ampliado">
-    <div class="lb-info">
-      <p class="cap" id="lbCap"></p>
-      <p class="meta" id="lbMeta"></p>
-    </div>
-  </div>
-</div>
-
-<div id="toast" role="status"></div>
-
-<script>
-(function(){
-  "use strict";
-
-  /* ---------- CAMPO DE ESTRELLAS ---------- */
-  var cv=document.getElementById('starfield'),cx=cv.getContext('2d');
-  var W,H,stars=[],meteor=null,nextMeteor=performance.now()+4000;
-  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
-  window.addEventListener('resize',resize);resize();
-  for(var i=0;i<170;i++){
-    stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.4+.3,p:Math.random()*Math.PI*2,s:.4+Math.random()*1.6,red:Math.random()<.12});
-  }
-  function frame(t){
-    cx.clearRect(0,0,W,H);
-    var g=cx.createRadialGradient(W*.75,H*.12,0,W*.75,H*.12,W*.5);
-    g.addColorStop(0,'rgba(110,0,0,0.10)');g.addColorStop(1,'rgba(0,0,0,0)');
-    cx.fillStyle=g;cx.fillRect(0,0,W,H);
-    for(var k=0;k<stars.length;k++){
-      var s=stars[k];
-      var tw=.55+.45*Math.sin(t*.001*s.s+s.p);
-      cx.globalAlpha=tw*(s.red?.8:1);
-      cx.fillStyle=s.red?'#ff5a3c':'#e8e0da';
-      cx.fillRect(s.x*W,s.y*H,s.r,s.r);
-    }
-    cx.globalAlpha=1;
-    if(!meteor&&t>nextMeteor){meteor={x:Math.random()*W*.8+W*.1,y:-20,vx:(Math.random()*2-1)*3,vy:4+Math.random()*3,life:1};}
-    if(meteor){
-      meteor.x+=meteor.vx;meteor.y+=meteor.vy;meteor.life-=.012;
-      cx.strokeStyle='rgba(255,60,40,'+Math.max(meteor.life,0)+')';
-      cx.lineWidth=1.4;
-      cx.beginPath();cx.moveTo(meteor.x,meteor.y);cx.lineTo(meteor.x-meteor.vx*8,meteor.y-meteor.vy*8);cx.stroke();
-      if(meteor.life<=0||meteor.y>H+40){meteor=null;nextMeteor=t+5000+Math.random()*9000;}
-    }
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-
-  /* ---------- RELOJ + DÍAS ---------- */
-  var clockEl=document.getElementById('clock');
-  function tick(){clockEl.textContent=new Date().toTimeString().slice(0,8);}
-  tick();setInterval(tick,1000);
-  var eventDate=new Date('2026-08-12T11:47:00');
-  var days=Math.max(1,Math.ceil((Date.now()-eventDate.getTime())/86400000));
-  document.getElementById('stDays').textContent=String(days).padStart(2,'0');
-
-  /* ---------- DATOS SEMILLA ---------- */
-  var DATA=[
-    {id:1,cat:'grave',tag:'SIN FILTRO',exp:'1/4000 · f/8 · 400MM',w:23,
-     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/12f3a1965-320b-4b31-b32a-3f2e4d2d4667.png',
-     cap:'La corona presenta una estructura angular que ningún modelo explica. El filtro certificado apareció derretido por dentro. Por dentro.',
-     meta:'CÁCERES · 12.08.2026',alias:'OBSERVADOR-Δ7'},
-    {id:2,cat:'grave',tag:'VHS-C MUNICIPAL',exp:'SP · 00:47:12 REC',w:41,
-     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/19683757a-8fa3-4c4a-8411-c76a5edbb743.png',
-     cap:'Plaza Mayor, 11:47. Todos miraban arriba. En la cinta original nadie parpadeaba. En esta copia, tres personas ya no están.',
-     meta:'TRUJILLO · 12.08.2026',alias:'CÁMARA MUNICIPAL 04'},
-    {id:3,cat:'grave',tag:'PLACA 1905',exp:'COL. OBSERVATORIO',w:9,
-     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/109481dc7-96b5-4250-9814-f625b2be32b0.png',
-     cap:'Placa catalogada en 1905. Los filamentos y el objeto del limbo ya estaban ahí. Nadie los registró hasta ayer. Ayer no fue la primera vez.',
-     meta:'OBSERVATORIO DEL EBRO · 1905',alias:'ARCHIVISTA E.B.'},
-    {id:4,cat:'oficial',tag:'COMUNICADO Nº7',exp:'PERITAJE OFICIAL',w:18,
-     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/12c320983-2e0a-454d-90f4-b4054659f1a3.png',
-     cap:'«Las sombras alargadas se deben a refracción inusual», dice el comunicado. El eclipse ocurrió al mediodía. Las sombras apuntan al este. El este era el norte.',
-     meta:'VALLE DEL TIÉTAR · 12.08.2026',alias:'PASTOR ANÓNIMO'},
-    {id:5,cat:'grave',tag:'ROLLO SELLADO 1972',exp:'REVELADO 2026',w:66,
-     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/1591571b7-deb5-4d85-a8ad-d55a5ed4abdf.png',
-     cap:'Encontrada dentro de una cámara sellada desde 1972. El rollo estaba virgen. Esta imagen no. La figura no estaba en el negativo: estaba esperando.',
-     meta:'HALLAZGO: ALBACETE · ROLLO 1972',alias:'RESTAURADORA M.Q.'},
-    {id:6,cat:'oficial',tag:'PERICIA POLICIAL',exp:'EXP. 4412/26',w:12,
-     img:'https://image.qwenlm.ai/public_source/9e5b93a7-4d58-493f-8b76-96301fd0d050/187752f45-7b18-4f26-ab94-3c2d8d72e4bc.png',
-     cap:'Tomada desde un vehículo en marcha, sin conductor. El parabrisas se fracturó desde dentro. El vehículo no tiene dueño registrado desde el día 11.',
-     meta:'A-6 KM 39 · 12.08.2026',alias:'GRÚA POLICIAL 12'}
-  ];
-
-  var filter='all';
-  var gallery=document.getElementById('gallery');
-  var syncLabel=document.getElementById('syncLabel');
-  var syncT=null;
-
-  function cardHTML(d){
-    var verified=d.w>=50;
-    return '<article class="card" data-cat="'+d.cat+'" data-id="'+d.id+'">'
-      +'<div class="card-media" role="button" tabindex="0" aria-label="Ampliar registro">'
-      +'<img src="'+d.img+'" alt="Registro '+d.id+'" loading="lazy">'
-      +'<span class="badge-tag'+(d.tag==='SIN FILTRO'?' nofiltro':'')+'">'+d.tag+'</span>'
-      +'<span class="badge-anom'+(verified?' verified':'')+'"><i></i>'+(verified?'VERIFICADA':'ANOMALÍA')+'</span>'
-      +'<span class="exp">'+d.exp+'</span>'
-      +'</div>'
-      +'<p class="card-caption">'+d.cap+'</p>'
-      +'<div class="card-witness">'
-      +'<b class="w-num" data-num="'+d.id+'">'+d.w+'</b>'
-      +'<p class="w-label">testigos presenciales</p>'
-      +'<button class="w-btn" data-w="'+d.id+'"'+(verified?' disabled':'')+'>'+(verified?'✓ VERIFICADA':'+1 TESTIGO')+'</button>'
-      +'</div>'
-      +'<p class="card-meta">'+d.meta+' · '+d.alias+'</p>'
-      +'</article>';
-  }
-
-  function updateStats(){
-    document.getElementById('stReg').textContent=String(DATA.length).padStart(2,'0');
-    var tot=DATA.reduce(function(a,b){return a+b.w;},0);
-    document.getElementById('stWit').textContent=tot>999?(tot/1000).toFixed(1)+'K':String(tot).padStart(3,'0');
-  }
-
-  function render(){
-    var list=DATA.filter(function(d){return filter==='all'||d.cat===filter;});
-    gallery.innerHTML=list.map(cardHTML).join('');
-    document.getElementById('galleryCount').textContent='MOSTRANDO '+list.length+' DE '+DATA.length+' REGISTROS · ORDEN DE RECEPCIÓN INVERSO';
-    updateStats();
-  }
-
-  /* ---------- FILTROS ---------- */
-  document.getElementById('filters').addEventListener('click',function(e){
-    var b=e.target.closest('button[data-f]');if(!b)return;
-    document.querySelectorAll('#filters button').forEach(function(x){x.classList.toggle('active',x===b);});
-    filter=b.dataset.f;
-    syncLabel.textContent='RESINCRONIZANDO ENLACE…';
-    gallery.classList.remove('resync');void gallery.offsetWidth;gallery.classList.add('resync');
-    clearTimeout(syncT);
-    syncT=setTimeout(function(){syncLabel.textContent='ENLACE ESTABLE · NODO 7';},900);
-    render();
-  });
-
-  /* ---------- TOAST ---------- */
-  var toastEl=document.getElementById('toast'),toastT=null;
-  function toast(msg){
-    toastEl.textContent=msg;toastEl.classList.add('show');
-    clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show');},3400);
-  }
-
-  /* ---------- LIGHTBOX ---------- */
-  var lb=document.getElementById('lightbox'),lbImg=document.getElementById('lbImg'),
-      lbCap=document.getElementById('lbCap'),lbMeta=document.getElementById('lbMeta');
-  function openLb(d){
-    lbImg.src=d.img;lbCap.textContent=d.cap;
-    lbMeta.textContent=d.meta+' · '+d.exp+' · '+d.w+' TESTIGOS';
-    lb.classList.add('open');document.body.style.overflow='hidden';
-  }
-  function closeLb(){lb.classList.remove('open');document.body.style.overflow='';lbImg.src='';}
-  lb.addEventListener('click',function(e){if(e.target===lb)closeLb();});
-  document.getElementById('lbClose').addEventListener('click',closeLb);
-  window.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb();});
-
-  /* ---------- GALERÍA: TESTIGOS + LIGHTBOX ---------- */
-  gallery.addEventListener('click',function(e){
-    var wb=e.target.closest('.w-btn');
-    if(wb){
-      var id=+wb.dataset.w;
-      var d=DATA.find(function(x){return x.id===id;});
-      if(!d||d.w>=50)return;
-      d.w++;
-      var num=gallery.querySelector('[data-num="'+id+'"]');
-      if(num){num.textContent=d.w;num.classList.remove('pop');void num.offsetWidth;num.classList.add('pop');}
-      if(d.w>=50){
-        wb.disabled=true;wb.textContent='✓ VERIFICADA';
-        var badge=wb.closest('.card').querySelector('.badge-anom');
-        badge.classList.add('verified');badge.innerHTML='<i></i>VERIFICADA';
-        toast('REGISTRO VERIFICADO — LA VERDAD YA NO PUEDE BORRARSE');
-      }
-      updateStats();
-      return;
-    }
-    var md=e.target.closest('.card-media');
-    if(md){
-      var dd=DATA.find(function(x){return x.id===+md.closest('.card').dataset.id;});
-      if(dd)openLb(dd);
-    }
-  });
-  gallery.addEventListener('keydown',function(e){
-    if(e.key==='Enter'&&e.target.classList.contains('card-media')){
-      var dd=DATA.find(function(x){return x.id===+e.target.closest('.card').dataset.id;});
-      if(dd)openLb(dd);
-    }
-  });
-
-  /* ---------- SUBIDA ---------- */
-  var dz=document.getElementById('dz'),fileInput=document.getElementById('fileInput'),
-      preview=document.getElementById('preview'),dzInfo=document.getElementById('dzInfo'),
-      statusEl=document.getElementById('status'),go=document.getElementById('go'),
-      bar=document.getElementById('bar'),progressLabel=document.getElementById('progressLabel');
-  var fileURL=null,busy=false;
-
-  function setStatus(msg,cls){statusEl.textContent=msg;statusEl.className='status'+(cls?' '+cls:'');}
-
-  function setFile(file){
-    if(!file)return;
-    if(!file.type||file.type.indexOf('image/')!==0){setStatus('ERROR: FORMATO NO RECONOCIDO. SOLO IMÁGENES.','bad blink');return;}
-    if(file.size>10*1024*1024){setStatus('ERROR: ARCHIVO DEMASIADO GRANDE. MÁX. 10 MB.','bad blink');return;}
-    var rd=new FileReader();
-    rd.onload=function(){
-      fileURL=rd.result;
-      preview.src=fileURL;preview.hidden=false;
-      dz.classList.add('has-file');
-      dzInfo.textContent='◉ '+file.name+' — CLIC PARA SUSTITUIR';
-      go.disabled=false;
-      setStatus('MATERIAL RECIBIDO. ASIGNA UN ALIAS Y TRANSMITE.','ok');
-    };
-    rd.readAsDataURL(file);
-  }
-
-  dz.addEventListener('click',function(){fileInput.click();});
-  dz.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click();}});
-  fileInput.addEventListener('change',function(){setFile(fileInput.files[0]);});
-  ['dragover','dragenter'].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('drag');});});
-  ['dragleave','dragend'].forEach(function(ev){dz.addEventListener(ev,function(){dz.classList.remove('drag');});});
-  dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('drag');setFile(e.dataTransfer.files[0]);});
-  document.getElementById('upForm').addEventListener('submit',function(e){e.preventDefault();});
-
-  var PHASES=[[18,'ESTABLECIENDO CANAL CIFRADO…'],[42,'SUBIENDO NEGATIVO…'],[64,'ELIMINANDO METADATOS COMPROMETEDORES…'],[86,'VERIFICANDO COHERENCIA ÓPTICA…'],[100,'TRANSMISIÓN COMPLETA']];
-
-  go.addEventListener('click',function(){
-    if(busy)return;
-    if(!fileURL){setStatus('ERROR: NO SE DETECTA MATERIAL FOTOGRÁFICO.','bad blink');return;}
-    busy=true;go.disabled=true;bar.style.width='0%';
-    var p=0,pi=0;
-    var iv=setInterval(function(){
-      p+=3+Math.random()*7;
-      while(pi<PHASES.length&&p>=PHASES[pi][0]){progressLabel.textContent=PHASES[pi][1];pi++;}
-      if(p>=100){p=100;clearInterval(iv);finish();}
-      bar.style.width=p+'%';
-    },140);
-  });
-
-  function finish(){
-    var alias=(document.getElementById('alias').value.trim()||'ANÓNIMO-∅').toUpperCase();
-    var lugar=document.getElementById('lugar').value.trim()||'UBICACIÓN OMITIDA';
-    DATA.unshift({
-      id:Date.now(),img:fileURL,cat:'nueva',tag:'SIN VERIFICAR',exp:'EXP. DESCONOCIDA',w:0,
-      cap:'Registro recibido por el canal cifrado. Pendiente de clasificación. Si reconoces esta imagen, no lo digas en voz alta.',
-      meta:lugar.toUpperCase()+' · 13.08.2026',alias:alias
-    });
-    render();
-    setStatus('REGISTRO ACEPTADO. TU IDENTIDAD HA SIDO DESTRUIDA.','ok');
-    toast('PRUEBA AÑADIDA AL ARCHIVO — SECCIÓN «SIN VERIFICAR»');
-    document.querySelector('#filters button[data-f="nueva"]').click();
-    document.getElementById('archivo').scrollIntoView({behavior:'smooth'});
-    setTimeout(function(){
-      fileURL=null;preview.hidden=true;preview.src='';
-      dz.classList.remove('has-file');dzInfo.textContent='—';
-      go.disabled=false;busy=false;bar.style.width='0%';progressLabel.textContent='';
-      document.getElementById('alias').value='';document.getElementById('lugar').value='';
-      fileInput.value='';
-    },1400);
-  }
-
-  /* ---------- INIT ---------- */
-  render();
-})();
-</script>
+    <!-- ============ SCRIPTS ============ -->
+    <script src="js/app.js" defer></script>
 </body>
 </html>
