@@ -1,7 +1,6 @@
 /* =========================================================
    EL SOL NOS MIENTE · Lógica del Archivo de Anomalías
    ========================================================= */
-
 (() => {
   'use strict';
 
@@ -10,11 +9,7 @@
   const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
   /* ---------- ESTADO ---------- */
-  let state = {
-    items: loadItems(),
-    filter: 'all',
-    pendingFile: null
-  };
+  const state = { items: loadItems(), filter: 'all', pendingFile: null };
 
   function loadItems() {
     try {
@@ -25,7 +20,7 @@
 
   function saveItems() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items)); }
-    catch (e) { toast('⚠ Almacenamiento lleno. Purga registros antiguos.'); }
+    catch { toast('⚠ Almacenamiento lleno. Purga registros antiguos.'); }
   }
 
   /* ---------- TOAST ---------- */
@@ -67,7 +62,7 @@
     resize(); tick();
   }
 
-  /* ---------- DROPZONE ---------- */
+  /* ---------- ZONA DE CARGA ---------- */
   const dropzone = $('#dropzone');
   const fileInput = $('#fileInput');
   const preview = $('#preview');
@@ -77,17 +72,20 @@
   const progressLabel = $('#progressLabel');
   const progressBar = $('#progressBar');
 
+  function setStatus(msg, type = '') {
+    statusEl.className = 'status ' + type;
+    statusEl.textContent = msg;
+  }
+
   function setFile(file) {
     if (!file || !file.type.startsWith('image/')) {
-      setStatus('Formato inválido. Solo imágenes.', 'bad');
-      return;
+      setStatus('Formato inválido. Solo imágenes.', 'bad'); return;
     }
     if (file.size > 8 * 1024 * 1024) {
-      setStatus('Archivo demasiado grande (máx 8 MB).', 'bad');
-      return;
+      setStatus('Archivo demasiado grande (máx 8 MB).', 'bad'); return;
     }
     state.pendingFile = file;
-    dzOverlay.textContent = `◉ ${file.name.toUpperCase()}`;
+    dzOverlay.textContent = '◉ ' + file.name.toUpperCase();
     dropzone.classList.add('has-file');
     preview.src = URL.createObjectURL(file);
     submitBtn.disabled = false;
@@ -104,24 +102,15 @@
     progressLabel.textContent = 'ESPERANDO ARCHIVO…';
   }
 
-  function setStatus(msg, type = '') {
-    statusEl.className = 'status ' + type;
-    statusEl.textContent = msg;
-  }
-
-  dropzone.addEventListener('dragover', e => {
-    e.preventDefault(); dropzone.classList.add('drag');
-  });
+  dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
   dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
   dropzone.addEventListener('drop', e => {
     e.preventDefault(); dropzone.classList.remove('drag');
     if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
   });
-  fileInput.addEventListener('change', e => {
-    if (e.target.files[0]) setFile(e.target.files[0]);
-  });
+  fileInput.addEventListener('change', e => { if (e.target.files[0]) setFile(e.target.files[0]); });
 
-  /* ---------- SUBMIT ---------- */
+  /* ---------- ENVÍO ---------- */
   $('#uploadForm').addEventListener('submit', async e => {
     e.preventDefault();
     if (!state.pendingFile) return;
@@ -139,12 +128,12 @@
       const dataUrl = await readFileAsDataURL(state.pendingFile);
       for (let p = 0; p <= 100; p += 5) {
         progressBar.style.width = p + '%';
-        progressLabel.textContent = `SINCRONIZANDO… ${p}%`;
+        progressLabel.textContent = 'SINCRONIZANDO… ' + p + '%';
         await new Promise(r => setTimeout(r, 55));
       }
 
       const item = {
-        id: crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now(),
+        id: (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now()),
         title, caption, category, location,
         img: dataUrl,
         witnesses: 0,
@@ -162,7 +151,7 @@
       setStatus('Registro completado. Bienvenido, testigo.', 'ok');
       $('#uploadForm').reset();
       resetDropzone();
-      scrollTo('#archivo');
+      scrollToSel('#archivo');
     } catch (err) {
       console.error(err);
       setStatus('Error al procesar la evidencia.', 'bad');
@@ -182,7 +171,8 @@
   function randomExposure() {
     const f = [1.4, 2, 2.8, 4, 5.6, 8, 11, 16][Math.floor(Math.random() * 8)];
     const s = ['1/1000','1/500','1/250','1/125','1/60','1/30'][Math.floor(Math.random() * 6)];
-    return `ƒ/${f} · ${s}s · ISO ${[100,200,400,800][Math.floor(Math.random()*4)]}`;
+    const iso = [100,200,400,800][Math.floor(Math.random() * 4)];
+    return 'ƒ/' + f + ' · ' + s + 's · ISO ' + iso;
   }
 
   /* ---------- GALERÍA ---------- */
@@ -196,9 +186,8 @@
 
     gallery.innerHTML = '';
     items.forEach(item => gallery.appendChild(buildCard(item)));
-    galleryCount.textContent = `◉ ${items.length} DE ${state.items.length} REGISTROS MOSTRADOS`;
+    galleryCount.textContent = '◉ ' + items.length + ' DE ' + state.items.length + ' REGISTROS MOSTRADOS';
 
-    // Resync animación
     gallery.classList.add('resync');
     setTimeout(() => gallery.classList.remove('resync'), 450);
   }
@@ -210,34 +199,30 @@
     const noFiltro = item.category === 'sin filtrar' ? ' nofiltro' : '';
     const verified = item.witnesses >= 5 ? ' verified' : '';
 
-    card.innerHTML = `
-      <div class="card-media" tabindex="0" role="button" aria-label="Ampliar evidencia">
-        <div class="badge-tag${noFiltro}">${item.category.toUpperCase()}</div>
-        <div class="badge-anom${verified}"><i></i>${item.witnesses} TESTIGOS</div>
-        <div class="exp">EXP · ${item.exposure}</div>
-        <img src="${item.img}" alt="${escapeHtml(item.title)}" loading="lazy">
-      </div>
-      <div class="card-caption">${escapeHtml(item.title)}${item.caption ? ' — ' + escapeHtml(item.caption) : ''}</div>
-      <div class="card-witness">
-        <span class="w-num" id="wn-${item.id}">${item.witnesses}</span>
-        <div class="w-label">CONFIRMACIONES DE TESTIGOS</div>
-        <button class="w-btn" data-witness="${item.id}" ${item.witnessed ? 'disabled' : ''}>
-          ${item.witnessed ? '◉ YA ERES TESTIGO' : '☉ SOY TESTIGO'}
-        </button>
-      </div>
-      <div class="card-meta">◉ ${escapeHtml(item.location)} · ${new Date(item.timestamp).toLocaleString('es-MX')}</div>
-    `;
+    card.innerHTML =
+      '<div class="card-media" tabindex="0" role="button" aria-label="Ampliar evidencia">' +
+        '<div class="badge-tag' + noFiltro + '">' + item.category.toUpperCase() + '</div>' +
+        '<div class="badge-anom' + verified + '"><i></i>' + item.witnesses + ' TESTIGOS</div>' +
+        '<div class="exp">EXP · ' + item.exposure + '</div>' +
+        '<img src="' + item.img + '" alt="' + escapeHtml(item.title) + '" loading="lazy">' +
+      '</div>' +
+      '<div class="card-caption">' + escapeHtml(item.title) + (item.caption ? ' — ' + escapeHtml(item.caption) : '') + '</div>' +
+      '<div class="card-witness">' +
+        '<span class="w-num" id="wn-' + item.id + '">' + item.witnesses + '</span>' +
+        '<div class="w-label">CONFIRMACIONES DE TESTIGOS</div>' +
+        '<button class="w-btn" data-witness="' + item.id + '" ' + (item.witnessed ? 'disabled' : '') + '>' +
+          (item.witnessed ? '◉ YA ERES TESTIGO' : '☉ SOY TESTIGO') +
+        '</button>' +
+      '</div>' +
+      '<div class="card-meta">◉ ' + escapeHtml(item.location) + ' · ' + new Date(item.timestamp).toLocaleString('es-MX') + '</div>';
 
-    // Click en imagen abre lightbox
     const media = $('.card-media', card);
     media.addEventListener('click', () => openLightbox(item));
     media.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(item); }
     });
 
-    // Botón testigo
     $('.w-btn', card).addEventListener('click', () => confirmWitness(item.id));
-
     return card;
   }
 
@@ -253,16 +238,10 @@
     item.witnesses += 1;
     item.witnessed = true;
     saveItems();
-
-    const num = $(`#wn-${id}`);
-    if (num) {
-      num.textContent = item.witnesses;
-      num.classList.add('pop');
-      setTimeout(() => num.classList.remove('pop'), 500);
-    }
-
-    toast('◉ TU CONFIRMACIÓN HA SIDO REGISTRADA');
     renderGallery();
+    const num = document.getElementById('wn-' + id);
+    if (num) num.classList.add('pop');
+    toast('◉ TU CONFIRMACIÓN HA SIDO REGISTRADA');
   }
 
   /* ---------- FILTROS ---------- */
@@ -290,7 +269,7 @@
   function openLightbox(item) {
     $('#lbImg').src = item.img;
     $('#lbCap').textContent = item.title + (item.caption ? ' — ' + item.caption : '');
-    $('#lbMeta').textContent = `◉ ${item.location} · ${item.exposure} · ${item.witnesses} testigos`;
+    $('#lbMeta').textContent = '◉ ' + item.location + ' · ' + item.exposure + ' · ' + item.witnesses + ' testigos';
     lightbox.classList.add('open');
   }
   function closeLightbox() { lightbox.classList.remove('open'); }
@@ -298,16 +277,14 @@
   $('#lbClose').addEventListener('click', closeLightbox);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-  /* ---------- STATS ---------- */
-  function updateStatCount() {
-    $('#statCount').textContent = state.items.length;
+  /* ---------- VARIOS ---------- */
+  function updateStatCount() { $('#statCount').textContent = state.items.length; }
+  function updateClock() { $('#lastSync').textContent = new Date().toLocaleTimeString('es-MX'); }
+  function scrollToSel(sel) {
+    const el = document.querySelector(sel);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function updateClock() {
-    $('#lastSync').textContent = new Date().toLocaleTimeString('es-MX');
-  }
-
-  /* ---------- INIT ---------- */
   function init() {
     initStarfield();
     renderGallery();
@@ -315,20 +292,12 @@
     updateClock();
     setInterval(updateClock, 1000);
 
-    // Scroll suave a secciones
     $$('.btn-soul').forEach(a => {
-      if (a.getAttribute('href')?.startsWith('#')) {
-        a.addEventListener('click', e => {
-          e.preventDefault();
-          scrollTo(a.getAttribute('href'));
-        });
+      const href = a.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        a.addEventListener('click', e => { e.preventDefault(); scrollToSel(href); });
       }
     });
-  }
-
-  function scrollTo(sel) {
-    const el = document.querySelector(sel);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   document.addEventListener('DOMContentLoaded', init);
