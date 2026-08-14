@@ -215,12 +215,14 @@
 </head>
 <body>
 
+<!-- Capas atmosféricas -->
 <canvas id="starfield" aria-hidden="true"></canvas>
 <div class="scanlines" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
 <div class="noise" aria-hidden="true"></div>
 
-<div class="ticker" aria-label="Advertencias en directo">
+<!-- Ticker -->
+<div class="ticker" role="marquee" aria-label="Advertencias en directo">
   <div class="ticker-track">
     <span>⚠ AVISO: DISTORSIONES ÓPTICAS REPORTADAS EN LATITUD 19.43° N</span>
     <span>◉ ELIMINACIÓN DE REGISTROS FOTOGRÁFICOS DETECTADA</span>
@@ -233,11 +235,13 @@
   </div>
 </div>
 
+<!-- Topbar -->
 <header class="topbar">
   <div class="brand">EL SOL NOS MIENTE<small>ARCHIVO · v.1.0</small></div>
   <div class="live"><span class="dot"></span>TRANSMISIÓN <b>ACTIVA</b></div>
 </header>
 
+<!-- Hero -->
 <main>
   <section class="hero" id="inicio">
     <div class="hero-left">
@@ -270,6 +274,7 @@
     </div>
   </section>
 
+  <!-- SUBIDA -->
   <section id="registro">
     <div class="section-head">
       <div class="num">01</div>
@@ -321,6 +326,7 @@
     </div>
   </section>
 
+  <!-- GALERÍA -->
   <section id="archivo">
     <div class="section-head">
       <div class="num">02</div>
@@ -344,12 +350,14 @@
   </section>
 </main>
 
+<!-- Footer -->
 <footer>
   <div class="f-brand">EL SOL NOS MIENTE</div>
   <div class="blinkline">◉ EL ARCHIVO PERMANECE</div>
   <div class="coords">19.4326° N · 99.1332° W · ÚLTIMA SINCRONIZACIÓN <span id="lastSync">--:--:--</span></div>
 </footer>
 
+<!-- Lightbox -->
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada">
   <div class="lb-box" onclick="event.stopPropagation()">
     <button class="lb-close" id="lbClose">✕ CERRAR</button>
@@ -361,6 +369,7 @@
   </div>
 </div>
 
+<!-- Toast -->
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="app.js"></script>
